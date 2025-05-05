@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pangram Checker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Add a smooth transition for dark mode */
+    .dark-transition {
+      transition: background-color 0.3s, color 0.3s;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 dark-transition dark:text-white">
+
+  <div class="container mx-auto p-6">
+    <div class="flex justify-between items-center">
+      <h1 class="text-4xl font-bold text-blue-600 dark:text-blue-400">Pangram Checker</h1>
+      <button id="darkModeToggle" class="p-2 bg-blue-500 rounded-full text-white hover:bg-blue-400 dark:bg-yellow-500 dark:hover:bg-yellow-400">
+        🌙 / ☀️
+      </button>
+    </div>
+    <input type="text" id="inputText" placeholder="Type your sentence here..." class="mt-6 p-4 w-full border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:focus:ring-yellow-500" />
+    <div id="result" class="mt-4 text-xl font-semibold p-4 rounded-lg"></div>
+  </div>
+
+  <script>
+    function isPangram(string) {
+      const lowerCased = string.toLowerCase();
+      const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+      const letters = new Set();
+
+      for (let char of lowerCased) {
+        if (char >= 'a' && char <= 'z') {
+          letters.add(char);
+        }
+      }
+
+      const missingLetters = [...alphabet].filter(letter => !letters.has(letter));
+
+      if (missingLetters.length === 0) {
+        return "✅ The input is a pangram. All letters A-Z are present.";
+      } else {
+        return `❌ Not a pangram. Missing letters: ${missingLetters.join(', ').toUpperCase()}`;
+      }
+    }
+
+    const inputField = document.getElementById('inputText');
+    const resultDiv = document.getElementById('result');
+
+    inputField.addEventListener('input', () => {
+      const message = isPangram(inputField.value);
+      resultDiv.textContent = message;
+      resultDiv.className = 'mt-4 text-xl font-semibold p-4 rounded-lg ' + (message.startsWith('✅') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800');
+    });
+
+    // Toggle dark mode
+    document.getElementById('darkModeToggle').addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+    });
+  </script>
+
+</body>
+</html>
